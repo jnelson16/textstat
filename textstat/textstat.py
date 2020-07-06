@@ -6,6 +6,7 @@ from collections import Counter
 import pkg_resources
 from functools import lru_cache
 from pyphen import Pyphen
+import textblob
 
 
 langs = {
@@ -158,12 +159,7 @@ class textstatistics:
         """
         Sentence count of a text
         """
-        ignore_count = 0
-        sentences = re.split(r' *[\.\?!][\'"\)\]]*[ |\n](?=[A-Z])', text)
-        for sentence in sentences:
-            if self.lexicon_count(sentence) <= 2:
-                ignore_count += 1
-        return max(1, len(sentences) - ignore_count)
+        return len(textblob.TextBlob(text).sentences)
 
     @lru_cache(maxsize=128)
     def avg_sentence_length(self, text):
